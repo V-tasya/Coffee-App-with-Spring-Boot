@@ -2,6 +2,7 @@ package com.vitaliya.simpleProject;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -55,18 +56,24 @@ class Coffee {
 @RequestMapping("/coffees")
 class RestApiSimpleProjectController {
 	private final CoffeeRepository coffeeRepository;
+@Value("${app.version}")
+private String appVersion;
 
-	public RestApiSimpleProjectController(CoffeeRepository coffeeRepository) {
-		this.coffeeRepository = coffeeRepository;
+public RestApiSimpleProjectController(CoffeeRepository coffeeRepository,  @Value("${app.default-coffee}") String defaultCoffee) {
+	this.coffeeRepository = coffeeRepository;
 
-		this.coffeeRepository.saveAll(List.of(
-				new Coffee("Cereza"),
-				new Coffee("Ganador"),
-				new Coffee("Lareno"),
-				new Coffee("Tres Pontas")
-		));
+	this.coffeeRepository.saveAll(List.of(
+			new Coffee(defaultCoffee),
+			new Coffee("Ganador"),
+			new Coffee("Lareno"),
+			new Coffee("Tres Pontas")
+	));
+}
+
+	@GetMapping("/version")
+	String getAppVersion() {
+		return "Application version: " + appVersion;
 	}
-
 	@GetMapping
 	Iterable<Coffee> getCoffees() {
 		return  coffeeRepository.findAll();
