@@ -5,6 +5,8 @@ import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class SimpleProjectApplication {
 
 	public static void main(String[] args) {
@@ -102,5 +105,25 @@ public RestApiSimpleProjectController(CoffeeRepository coffeeRepository,  @Value
 	@DeleteMapping("/{id}")
 	void deleteCoffee(@PathVariable String id) {
 		coffeeRepository.deleteById(id);
+	}
+}
+
+@RestController
+@RequestMapping("/request")
+class RequestController {
+	private final RequestReady requestReady;
+
+	public RequestController(RequestReady rr){
+		this.requestReady = rr;
+	}
+
+	@GetMapping("/name")
+	String getRequestReady() {
+		return "Name: " + requestReady.getName();
+	}
+
+	@GetMapping("/order")
+	String getNameAndRequest() {
+		return requestReady.getRequest();
 	}
 }
