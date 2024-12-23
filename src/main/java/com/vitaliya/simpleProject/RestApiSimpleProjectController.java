@@ -1,4 +1,4 @@
-import com.vitaliya.simpleProject.Coffee;
+package com.vitaliya.simpleProject;
 import com.vitaliya.simpleProject.CoffeeRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
